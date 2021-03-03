@@ -29,7 +29,7 @@ async function speechToText() {
   const transcription = response.results.map(result => result.alternatives[0].transcript).join('\n');
   console.log('Transcription', transcription);
   router.get('/', function(req, res, next) {
-    res.render('Transcription: ', { title: 'ATC', transcription });
+    res.render('transcription', { title: 'ATC', transcription });
   });
 }
 
