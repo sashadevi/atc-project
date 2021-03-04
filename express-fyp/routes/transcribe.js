@@ -5,9 +5,9 @@ const speech = require('@google-cloud/speech');
 
 async function speechToText() {
   const client = new speech.SpeechClient();
-  const filename = './public/resources/Atc02.mp3';
+  const filename = './public/resources/atc03.mp3';
   const encoding = 'MP3';
-  const sampleRateHertz = 16000;
+  const sampleRateHertz = 48000;
   const languageCode = 'en-UK';
 
   const config = {
