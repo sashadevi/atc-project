@@ -3,11 +3,27 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
 
-    <p>Air Traffic Control: <%= transcription %></p>
+    <div class="container">
+      <p>AC 452: Apron it's Air Canada 452 ready for taxi</p>
+      <span class="time-right">12:59</span>
+    </div>
+
+    <div class="atc container">
+      <p>ATC: <%= transcription %></p>
+      <span class="time-left">12:59</span>
+    </div>
+
+    <div class="container">
+      <p>AC 452: Roger hold short at Delta Papa</p>
+      <span class="time-right">12:59</span>
+    </div>
+
+    <!-- <p>Air Traffic Control: <%= transcription %></p> -->
   </body>
 </html>
