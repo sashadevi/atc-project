@@ -58,9 +58,13 @@ body {
   }
 
   .second-pair {
-    background-color:rgb(236, 0, 0);
+    background-color:rgb(253, 71, 71);
   }
 
   .third-pair {
     background-color: orange;
+  }
+
+  .v-separator {
+    border-right: 1px solid #c8c9ca;
   }

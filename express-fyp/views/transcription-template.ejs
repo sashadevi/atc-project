@@ -7,25 +7,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
-    <h1><%= title %></h1>
+    <h1></h1>
     <p>Sample template</p>
 
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+          <a class="navbar-brand" href='#'><%= title %> Application</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                  <li class="nav-item">
+                      <a class="nav-link active" aria-current="page" href="#">Home</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="./profile.ejs">Profile</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="./settings.ejs">Settings</a>
+                  </li>
+              </ul>
+          </div>
+      </div>
+    </nav> 
+
     <div class="container">
-      <div class="row">
-        <div class="col-4">
+      <div class="row ">
+        <div class="col-4 v-separator">
+          <h4>Flight Callsigns</h4>
+          <hr>
           <ul class="nav flex-column">
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="#">AC452</a>
             </li>
+            <hr>
             <li class="nav-item">
               <a class="nav-link" href="#">BA123</a>
             </li>
+            <hr>
             <li class="nav-item">
               <a class="nav-link" href="#">QF745</a>
             </li>
+            <hr>
             <li class="nav-item">
               <a class="nav-link" href="#">BA139</a>
             </li>
+            <hr>
           </ul>
         </div>
 
