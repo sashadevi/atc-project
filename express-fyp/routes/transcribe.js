@@ -27,7 +27,11 @@ async function speechToText() {
 
   const [response] = await client.recognize(request);
   const transcription = response.results.map(result => result.alternatives[0].transcript).join('\n');
+  const confidence = response.results
+  .map(result => result.alternatives[0].confidence)
+  .join('\n');
   console.log('Transcription', transcription);
+  console.log('Confidence', confidence);
   router.get('/', function(req, res, next) {
     res.render('transcription', { title: 'ATC', transcription });
   });
