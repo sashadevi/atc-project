@@ -1,0 +1,66 @@
+/* confidence indicator:
+not at all confident (0-0.5) = red
+quite confident (0.5-0.7)
+very confident (0.7-1) = #abc84a */
+
+body {
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  }
+  
+  a {
+    color: #00B7FF;
+  }
+  
+  .container {
+    border: 2px solid #dedede;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+  }
+  
+  .atc {
+    border-color: #ccc;
+    background-color: #ddd;
+  }
+  .container::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+  
+  .time-right {
+    float: right;
+    color: rgb(37, 37, 37);
+  }
+  
+  .time-left {
+    float: left;
+    color: rgb(37, 37, 37);
+  }
+
+  .request {
+    /* background-color: #abc84a; */
+    border-color: green;
+  }
+
+  .response {
+    border-color: rgb(255, 196, 0);
+  }
+
+  .confirmation {
+    /* background-color: #abc84a; */
+    border-color: green;
+  }
+ 
+  .first-pair {
+    background-color: #abc84a;
+  }
+
+  .second-pair {
+    background-color:rgb(236, 0, 0);
+  }
+
+  .third-pair {
+    background-color: orange;
+  }

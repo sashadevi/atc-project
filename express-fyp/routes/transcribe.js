@@ -35,6 +35,8 @@ async function speechToText() {
 
 speechToText();
 
-
+router.get('/template', function(req, res, next) {
+  res.render('transcription-template', { title: 'ATC' })
+});
 
 module.exports = router;
