@@ -43,3 +43,15 @@ body{margin-top:20px;}
 .border-top {
     border-top: 1px solid #dee2e6!important;
 }
+
+.first-pair {
+  background-color: greenyellow;
+}
+
+.second-pair {
+  background-color: red;
+}
+
+.third-pair {
+  background-color: orange;
+}
