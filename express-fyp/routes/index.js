@@ -6,4 +6,7 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'ATC' });
 });
 
+router.get('/login', function(req, res, next) {
+  res.render('login', { title: 'ATC' })
+});
 module.exports = router;
