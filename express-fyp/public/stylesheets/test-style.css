@@ -1,74 +1,45 @@
-/* confidence indicator:
-not at all confident (0-0.5) = red
-quite confident (0.5-0.7)
-very confident (0.7-1) = #abc84a */
+body{margin-top:20px;}
 
-body {
-    padding: 50px;
-    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  }
-  
-a {
-  color: #00B7FF;
+.chat-online {
+    color: #34ce57
 }
 
-.container {
-  border: 2px solid #dedede;
-  border-radius: 5px;
-  padding: 10px;
-  margin: 10px 0;
+.chat-offline {
+    color: #e4606d
 }
 
-.atc {
-  border-color: #ccc;
-  background-color: #ddd;
-}
-.container::after {
-  content: "";
-  clear: both;
-  display: table;
+.chat-messages {
+    display: flex;
+    flex-direction: column;
+    max-height: 800px;
+    overflow-y: scroll
 }
 
-.time-right {
-  color: rgb(37, 37, 37);
+.chat-message-left,
+.chat-message-right {
+    display: flex;
+    flex-shrink: 0
 }
 
-.time-left {
-  color: rgb(37, 37, 37);
-  
+.chat-message-left {
+    margin-right: auto
 }
 
-.request {
-  /* background-color: #abc84a; */
-  border-color: green;
+.chat-message-right {
+    flex-direction: row-reverse;
+    margin-left: auto
 }
-
-.response {
-  border-color: rgb(255, 196, 0);
+.py-3 {
+    padding-top: 1rem!important;
+    padding-bottom: 1rem!important;
 }
-
-.confirmation {
-  /* background-color: #abc84a; */
-  border-color: green;
+.px-4 {
+    padding-right: 1.5rem!important;
+    padding-left: 1.5rem!important;
 }
-
-.first-pair {
-  background-color: #abc84a;
+.flex-grow-0 {
+    flex-grow: 0!important;
 }
-
-.second-pair {
-  background-color:rgb(253, 71, 71);
-}
-
-.third-pair {
-  background-color: orange;
-}
-
-.v-separator {
-  border-right: 1px solid #c8c9ca;
-}
-
-span {
-  float: inline-end;
-  font-size: x-small;
+.border-top {
+    border-top: 1px solid #dee2e6!important;
 }
