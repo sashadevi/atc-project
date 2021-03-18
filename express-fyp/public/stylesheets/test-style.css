@@ -27,7 +27,7 @@ body{margin-top:20px;}
 
 .chat-message-right {
     flex-direction: row-reverse;
-    margin-left: auto
+    margin-left: auto;
 }
 .py-3 {
     padding-top: 1rem!important;
@@ -55,3 +55,4 @@ body{margin-top:20px;}
 .third-pair {
   background-color: orange;
 }
+
