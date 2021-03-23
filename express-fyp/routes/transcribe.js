@@ -5,8 +5,8 @@ const speech = require('@google-cloud/speech');
 
 async function speechToText() {
   const client = new speech.SpeechClient();
-  const filename = './public/resources/Animals.flac';
-  const encoding = 'FLAC';
+  const filename = './public/resources/test.wav';
+  const encoding = 'LINEAR16';
   const sampleRateHertz = 44100;
   const languageCode = 'en-UK';
 
@@ -30,8 +30,7 @@ async function speechToText() {
   const [response] = await client.recognize(request);
   const transcription = response.results.map(result => result.alternatives[0].transcript);
   const confidence = response.results
-  .map(result => result.alternatives[0].confidence)
-  .join('\n');
+  .map(result => result.alternatives[0].confidence);
 
   var speechResults = [];
   speechResults.push(transcription);
@@ -39,7 +38,7 @@ async function speechToText() {
   const channel = response.results
   .map(
     result =>
-      ` Channel Tag: ${result.channelTag} ${result.alternatives[0].transcript}`
+      `${result.alternatives[0].transcript}`
   );
 
   var color = "";
@@ -52,23 +51,19 @@ async function speechToText() {
     color="red";
   }
 
+  let refinedChannel = channel.filter((element, index) => {
+    return index % 2 === 0;
+  });
+
   var position="";
   var icon="";
-  // for(var i=0; i < transcription.length; i ++) {
-  //   if (transcription.indexOf(i) == 1) {
-  //     position="left";
-  //   } else if (transcription.indexOf(i) == 0) {
-  //     position="right";
-  //   }
-  // }
 
-
-
-  console.log('Transcription', transcription);
+  console.log(`Transcription: \n${transcription}`);
   console.log('Confidence', confidence);
   console.log(channel);
+  console.log(refinedChannel);
   router.get('/', function(req, res, next) {
-    res.render('transcription', { title: 'ATC', transcription, color, position, icon });
+    res.render('transcription', { title: 'ATC', transcription, color, position, icon, refinedChannel });
   });
 }
 

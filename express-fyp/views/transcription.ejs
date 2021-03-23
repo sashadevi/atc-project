@@ -42,8 +42,8 @@
       <div class="card container">
         <div class="position-relative">
           <div class="chat-messages p-4">
-            <%for(let i=0; i<transcription.length; i++) {%>
-              <%if(i==1) { position="left"; icon="fa-plane" }
+            <%for(let i=0; i<refinedChannel.length; i++) {%>
+              <%if(i%2 != 0) { position="left"; icon="fa-plane" }
                 else { position="right"; icon="fa-broadcast-tower"}
               %>
               <div class="chat-message-<%= position %> pb-4">
@@ -52,7 +52,7 @@
                   <div class="text-muted small text-nowrap mt-2">12:59</div>
                 </div>
                 <div class="flex-shrink-1 bg-secondary rounded py-2 px-3 ml-3 text-white">
-                  <%=transcription[i]%>
+                  <%=refinedChannel[i]%>
                 </div>    
               </div>
             <%}%>
