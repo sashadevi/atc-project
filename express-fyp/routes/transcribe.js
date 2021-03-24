@@ -5,18 +5,25 @@ const speech = require('@google-cloud/speech');
 
 async function speechToText() {
   const client = new speech.SpeechClient();
-  const filename = './public/resources/test.wav';
+  const filename = './public/resources/big-jet.wav';
   const encoding = 'LINEAR16';
   const sampleRateHertz = 44100;
-  const languageCode = 'en-UK';
+  const languageCode = 'en-GB';
+
+  const speechConext = {
+    phrases : ['$OOV_CLASS_DIGIT_SEQUENCE']
+  }
 
   const config = {
     encoding: encoding,
     sampleRateHertz: sampleRateHertz,
     languageCode: languageCode,
     audioChannelCount: 2,
-    enableSeparateRecognitionPerChannel: true
+    enableSeparateRecognitionPerChannel: true,
+    speechContexts: [speechConext]
   };
+
+
 
   const audio = {
     content: fs.readFileSync(filename).toString('base64'),
@@ -41,29 +48,25 @@ async function speechToText() {
       `${result.alternatives[0].transcript}`
   );
 
-  var color = "";
-
-  if (confidence > 0.7) {
-    color="green";
-  } else if (confidence > 0.5 && confidence < 0.7 ) {
-    color="orange";
-  } else if (confidence < 0.5) {
-    color="red";
-  }
-
   let refinedChannel = channel.filter((element, index) => {
     return index % 2 === 0;
   });
 
+  let newConfidence = confidence.filter((element, index) => {
+    return index % 2 === 0;
+  });
+
+
   var position="";
   var icon="";
+  var color = "";
 
   console.log(`Transcription: \n${transcription}`);
-  console.log('Confidence', confidence);
+  console.log('Confidence', newConfidence);
   console.log(channel);
   console.log(refinedChannel);
   router.get('/', function(req, res, next) {
-    res.render('transcription', { title: 'ATC', transcription, color, position, icon, refinedChannel });
+    res.render('transcription', { title: 'ATC', transcription, newConfidence, color, position, icon, refinedChannel });
   });
 }
 
