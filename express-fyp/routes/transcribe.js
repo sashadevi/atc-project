@@ -56,6 +56,15 @@ async function speechToText() {
     return index % 2 === 0;
   });
 
+  for(let i=0; i<refinedChannel.length; i++) {
+    var str = refinedChannel[i];
+    var matches = str.match(/\d+/g);
+
+    if(matches) {
+      console.log(matches)
+    }
+  }
+
 
   var position="";
   var icon="";

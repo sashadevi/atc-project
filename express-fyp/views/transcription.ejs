@@ -45,13 +45,17 @@
             <%for(let i=0; i<refinedChannel.length; i++) {%>
               <%if(i%2 != 0) { position="left"; icon="fa-plane" }
                 else { position="right"; icon="fa-broadcast-tower"}
+
+                if(newConfidence[i] <= 0.5 ) { color="danger"; }
+                else if(newConfidence[i] > 0.5 && newConfidence[i] <= 0.7) { color="warning"; }
+                else { color="success"; }
               %>
               <div class="chat-message-<%= position %> pb-4">
                 <div>
                   <i class="fas <%= icon %>"></i>
                   <div class="text-muted small text-nowrap mt-2">12:59</div>
                 </div>
-                <div class="flex-shrink-1 bg-grey rounded py-2 px-3 ml-3">
+                <div class="flex-shrink-1 bg-grey rounded py-2 px-3 ml-3 border border-<%= color %>">
                   <%=refinedChannel[i]%>
                 </div>    
               </div>
