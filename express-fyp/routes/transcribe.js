@@ -2,6 +2,16 @@ var express = require('express');
 var router = express.Router();
 const fs = require('fs');
 const speech = require('@google-cloud/speech');
+const { match } = require('assert');
+
+
+var jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+const { window } = new JSDOM();
+const { document } = (new JSDOM('')).window;
+global.document = document;
+
+var $ = jQuery = require('jquery')(window);
 
 async function speechToText() {
   const client = new speech.SpeechClient();
@@ -9,6 +19,7 @@ async function speechToText() {
   const encoding = 'LINEAR16';
   const sampleRateHertz = 44100;
   const languageCode = 'en-GB';
+
 
   const speechConext = {
     phrases : ['$OOV_CLASS_DIGIT_SEQUENCE']
@@ -56,16 +67,22 @@ async function speechToText() {
     return index % 2 === 0;
   });
 
+
   for(let i=0; i<refinedChannel.length; i++) {
-    var str = refinedChannel[i];
-    var matches = str.match(/\d+/g);
+    var  str = refinedChannel[i];
+    var arr = str.match(/\d+/g);
 
-    if(matches) {
-      console.log(matches)
-    }
+    var re = new RegExp(arr.join("|"), "g"); // create a a | b | c regex
+    console.log(re, str.match(re));
+    str.match(re).forEach(function(match, i) { // loop over the matches
+      str = str.replace(match, function replace(match) { // wrap the found strings
+        return '<mark>' + match + '</mark>';
+      });
+    });
+    console.log(str);
+    refinedChannel[i] = str;
   }
-
-
+  
   var position="";
   var icon="";
   var color = "";

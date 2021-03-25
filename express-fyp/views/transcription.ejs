@@ -6,6 +6,8 @@
     <link rel='stylesheet' href='/stylesheets/test-style.css' />
     <script src="https://kit.fontawesome.com/1fcfbf548a.js" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    
   </head>
   <body>
     <h1></h1>
@@ -38,6 +40,7 @@
           </div>
       </div>
     </nav>
+
     <main class="content">
       <div class="card container">
         <div class="position-relative">
@@ -56,7 +59,7 @@
                   <div class="text-muted small text-nowrap mt-2">12:59</div>
                 </div>
                 <div class="flex-shrink-1 bg-grey rounded py-2 px-3 ml-3 border border-<%= color %>">
-                  <%=refinedChannel[i]%>
+                  <%- refinedChannel[i] -%>
                 </div>    
               </div>
             <%}%>
