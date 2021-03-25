@@ -71,7 +71,6 @@ async function speechToText() {
   for(let i=0; i<refinedChannel.length; i++) {
     var  str = refinedChannel[i];
     var arr = str.match(/\d+/g);
-
     var re = new RegExp(arr.join("|"), "g"); // create a a | b | c regex
     console.log(re, str.match(re));
     str.match(re).forEach(function(match, i) { // loop over the matches
@@ -101,5 +100,20 @@ speechToText();
 router.get('/template', function(req, res, next) {
   res.render('transcription-template', { title: 'ATC' })
 });
+
+function compareArrays(arr1, arr2) {
+
+  // compare arrays
+  const result = JSON.stringify(arr1) == JSON.stringify(arr2)
+
+  // if result is true
+  if(result) {
+      console.log('The arrays have the same elements.');
+  }
+  else {
+      console.log('The arrays have different elements.');
+  }
+
+}
 
 module.exports = router;
