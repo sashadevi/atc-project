@@ -34,8 +34,6 @@ async function speechToText() {
     speechContexts: [speechConext]
   };
 
-
-
   const audio = {
     content: fs.readFileSync(filename).toString('base64'),
   };
@@ -67,7 +65,7 @@ async function speechToText() {
     return index % 2 === 0;
   });
 
-
+  //loop through transcription and find all numbers
   for(let i=0; i<refinedChannel.length; i++) {
     var  str = refinedChannel[i];
     var numArray = str.match(/\d+/g);
@@ -75,15 +73,28 @@ async function speechToText() {
     
   }
 
+  //loop through transcription and find callsigns
   for(let i=0; i<refinedChannel.length; i++) {
     var  str = refinedChannel[i];
     var callSignArray = str.match(/([A-Z][a-z]*)[\s-]([A-Z][a-z]*)/g);
     console.log(callSignArray);
     refinedChannel[i] = findMatches(callSignArray, str, refinedChannel[i]);
-
     console.log(refinedChannel[i]);
   }
-  
+
+  var keyWords = ["cleared", "takeoff", "landing", "expedite", "flight level", "squawk", "wilco"];
+  for(let i=0; i < refinedChannel.length; i++) {
+    var str = refinedChannel[i];
+    var keyWordArray = str.match(/\b(?:cleared|takeoff|landing|expedite|flight level|squawk|wilco)\b/gi);
+    console.log(keyWordArray);
+    if(keyWordArray != null) {
+      refinedChannel[i] = findMatches(keyWordArray, str, refinedChannel[i]);
+    }
+    
+    console.log(refinedChannel[i])
+  }
+
+
   var position="";
   var icon="";
   var color = "";
