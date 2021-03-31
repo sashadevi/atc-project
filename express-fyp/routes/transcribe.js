@@ -70,18 +70,18 @@ async function speechToText() {
 
   for(let i=0; i<refinedChannel.length; i++) {
     var  str = refinedChannel[i];
-    var arr = str.match(/\d+/g);
+    var numArray = str.match(/\d+/g);
+    refinedChannel[i] = findMatches(numArray, str, refinedChannel[i]);
+    
+  }
 
-    var re = new RegExp(arr.join("|"), "g"); // create a a | b | c regex
-    console.log(re, str.match(re));
-    str.match(re).forEach(function(match, i) { // loop over the matches
-      str = str.replace(match, function replace(match) {
-        // wrap the found strings
-        return '<mark>' + match + '</mark>';
-      });
-    });
-    console.log(str);
-    refinedChannel[i] = str;
+  for(let i=0; i<refinedChannel.length; i++) {
+    var  str = refinedChannel[i];
+    var callSignArray = str.match(/([A-Z][a-z]*)[\s-]([A-Z][a-z]*)/g);
+    console.log(callSignArray);
+    refinedChannel[i] = findMatches(callSignArray, str, refinedChannel[i]);
+
+    console.log(refinedChannel[i]);
   }
   
   var position="";
@@ -103,19 +103,19 @@ router.get('/template', function(req, res, next) {
   res.render('transcription-template', { title: 'ATC' })
 });
 
-function compareArrays(arr1, arr2) {
-
-    // compare arrays
-    const result = JSON.stringify(arr1) == JSON.stringify(arr2)
-
-    // if result is true
-    if(result) {
-        console.log('The arrays have the same elements.');
-    }
-    else {
-        console.log('The arrays have different elements.');
-    }
-
+function findMatches(arr, str, oldStr) {
+  var re = new RegExp(arr.join("|"), "g"); // create a a | b | c regex
+  console.log(re, str.match(re));
+  str.match(re).forEach(function(match, i) { // loop over the matches
+    str = str.replace(match, function replace(match) {
+      // wrap the found strings
+      return '<mark>' + match + '</mark>';
+    });
+  });
+  console.log(str);
+  oldStr = str;
+  return oldStr;
 }
+
 
 module.exports = router;
