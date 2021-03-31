@@ -1,6 +1,9 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+nav {
+  background-color: #00B7FF;
 }
 
 a {
@@ -33,4 +36,19 @@ a {
 .time-left {
   float: left;
   color: #999;
+}
+
+.strip {
+  position: relative;
+}
+
+.strip-content {
+  position:absolute;
+  text-align: center;
+  display: inline-block;
+  color: black;
+}
+
+.btn {
+  vertical-align: bottom;
 }
