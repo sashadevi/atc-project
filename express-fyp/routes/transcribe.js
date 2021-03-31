@@ -104,14 +104,14 @@ async function speechToText() {
   console.log(channel);
   console.log(refinedChannel);
   router.get('/', function(req, res, next) {
-    res.render('transcription', { title: 'ATC', transcription, newConfidence, color, position, icon, refinedChannel });
+    res.render('transcription', { title: 'Air Traffic Control Speech Recognition', transcription, newConfidence, color, position, icon, refinedChannel });
   });
 }
 
 speechToText();
 
 router.get('/template', function(req, res, next) {
-  res.render('transcription-template', { title: 'ATC' })
+  res.render('transcription-template', { title: 'Air Traffic Control Speech Recognition' })
 });
 
 function findMatches(arr, str, oldStr) {
