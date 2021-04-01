@@ -109,7 +109,7 @@ async function speechToText() {
     str.match(re).forEach(function(match, i) { // loop over the matches
       str = str.replace(match, function replace(match) {
         // wrap the found strings
-        return '<mark style="background-color:' + color+';">' + match + '</mark>';
+        return '<u style="text-decoration-color:' + color+'; text-decoration-thickness: 3px;">' + match + '</u>';
       });
     });
     oldStr = str;
