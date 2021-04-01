@@ -65,33 +65,88 @@ async function speechToText() {
     return index % 2 === 0;
   });
 
-  //loop through transcription and find all numbers
+  var numHighlightColour = "";
+  var numArray = [];
+  var numArrays = [];
+  var callSignArrays = [];
+  var keyWordArrays = [];
+  //loop through transcription
   for(let i=0; i<refinedChannel.length; i++) {
-    var  str = refinedChannel[i];
-    var numArray = str.match(/\d+/g);
-    refinedChannel[i] = findMatches(numArray, str, refinedChannel[i]);
-    
-  }
 
-  //loop through transcription and find callsigns
-  for(let i=0; i<refinedChannel.length; i++) {
     var  str = refinedChannel[i];
-    var callSignArray = str.match(/([A-Z][a-z]*)[\s-]([A-Z][a-z]*)/g);
-    console.log(callSignArray);
-    refinedChannel[i] = findMatches(callSignArray, str, refinedChannel[i]);
-    console.log(refinedChannel[i]);
-  }
+    //find all numbers and add  to a longer array
+    numArray = str.match(/\d+/g);
+    numArrays[i] = numArray;
 
-  var keyWords = ["cleared", "takeoff", "landing", "expedite", "flight level", "squawk", "wilco"];
-  for(let i=0; i < refinedChannel.length; i++) {
-    var str = refinedChannel[i];
-    var keyWordArray = str.match(/\b(?:cleared|takeoff|landing|expedite|flight level|squawk|wilco)\b/gi);
-    console.log(keyWordArray);
+    //find all callsigns and add to a longer array
+    callSignArray = str.match(/([A-Z][a-z]*)[\s-]([A-Z][a-z]*)/g);
+    callSignArrays[i] = callSignArray;
+
+    //find all keywords and add to longer array
+    keyWordArray = str.match(/\b(?:cleared|takeoff|landing|expedite|flight level|squawk|wilco)\b/gi);
     if(keyWordArray != null) {
-      refinedChannel[i] = findMatches(keyWordArray, str, refinedChannel[i]);
+      keyWordArrays[i] = keyWordArray;
+    }
+  }
+  console.log(numArrays);
+  highlightWords(numArrays);
+  highlightWords(callSignArrays);
+  highlightWords(keyWordArrays);
+
+  for(let i=0; i < refinedChannel.length; i ++) {
+    var  str = refinedChannel[i];
+    refinedChannel[i]=findMatches(numArrays[i], str, refinedChannel[i], numHighlightColour);
+    refinedChannel[i]=findMatches(callSignArrays[i], refinedChannel[i], refinedChannel[i], numHighlightColour);
+    if(keyWordArrays[i] != null) {
+      refinedChannel[i]=findMatches(keyWordArrays[i], refinedChannel[i], refinedChannel[i], numHighlightColour);
+    }
+  }
+  console.log(refinedChannel);
+
+  function findMatches(arr, str, oldStr, color) {
+    var re = new RegExp(arr.join("|"), "g"); // create a a | b | c regex
+    console.log(re, str.match(re));
+    str.match(re).forEach(function(match, i) { // loop over the matches
+      str = str.replace(match, function replace(match) {
+        // wrap the found strings
+        return '<mark style="background-color:' + color+';">' + match + '</mark>';
+      });
+    });
+    oldStr = str;
+    return oldStr;
+  }
+
+  function highlightWords(array, type) {
+    for(let i=1; i < array.length; i = i+2) {
+      if(arrayCompare(array[i-1], array[i]) == true) {
+        numHighlightColour = "green";
+      } else {
+        numHighlightColour = "red";
+      }
+    }
+  }
+
+
+  function arrayCompare(_arr1, _arr2) {
+    if (
+      !Array.isArray(_arr1)
+      || !Array.isArray(_arr2)
+      || _arr1.length !== _arr2.length
+      ) {
+        return false;
+      }
+    
+    // .concat() to not mutate arguments
+    const arr1 = _arr1.concat().sort();
+    const arr2 = _arr2.concat().sort();
+    
+    for (let i = 0; i < arr1.length; i++) {
+        if (arr1[i] !== arr2[i]) {
+            return false;
+         }
     }
     
-    console.log(refinedChannel[i])
+    return true;
   }
 
 
@@ -114,19 +169,8 @@ router.get('/template', function(req, res, next) {
   res.render('transcription-template', { title: 'Air Traffic Control Speech Recognition' })
 });
 
-function findMatches(arr, str, oldStr) {
-  var re = new RegExp(arr.join("|"), "g"); // create a a | b | c regex
-  console.log(re, str.match(re));
-  str.match(re).forEach(function(match, i) { // loop over the matches
-    str = str.replace(match, function replace(match) {
-      // wrap the found strings
-      return '<mark>' + match + '</mark>';
-    });
-  });
-  console.log(str);
-  oldStr = str;
-  return oldStr;
-}
+
+
 
 
 module.exports = router;
