@@ -4,6 +4,7 @@ const fs = require('fs');
 const speech = require('@google-cloud/speech');
 const { match } = require('assert');
 var multer = require('multer');
+var wavFileInfo = require('wav-file-info');
 
 router.get('/upload', function(req, res, next) {
   res.render('upload', { title: 'Air Traffic Control Speech Recognition' });
@@ -22,7 +23,7 @@ var upload = multer({ storage: storage })
 
 var fileName;
 var encoding;
-var sampleRateHertz;
+var sampleRate;
 
 router.post('/uploadfile', upload.single('myFile'), (req, res, next) => {
 file = req.file
@@ -35,9 +36,14 @@ if (!file) {
   fileName = `./${file.path}`;
   fileName.toString();
   // JSON.stringify(fileName)
+  wavFileInfo.infoByFilename(fileName, function(err, info) {
+    if (err) throw err;
+    console.log(info);
+    sampleRate = `${info.header.sample_rate}`;
+    console.log(sampleRate);
+  })
   console.log(fileName);
   res.redirect('/transcribe');
-
 })
 
 
@@ -55,7 +61,7 @@ router.get('/', async function(req, res, next) {
   const client = new speech.SpeechClient();
   const filename = fileName;
   const encoding = 'LINEAR16';
-  const sampleRateHertz = 44100;
+  const sampleRateHertz = sampleRate;
   const languageCode = 'en-GB';
 
 
