@@ -3,9 +3,47 @@ var router = express.Router();
 const fs = require('fs');
 const speech = require('@google-cloud/speech');
 const { match } = require('assert');
+var multer = require('multer');
+
+router.get('/upload', function(req, res, next) {
+  res.render('upload', { title: 'Air Traffic Control Speech Recognition' });
+});
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './public/uploads')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  }
+})
+ 
+var upload = multer({ storage: storage })
+
+var fileName;
+var encoding;
+var sampleRateHertz;
+
+router.post('/uploadfile', upload.single('myFile'), (req, res, next) => {
+file = req.file
+if (!file) {
+  const error = new Error('Please upload a file')
+  error.httpStatusCode = 400
+  return next(error)
+}
+  console.log(file);
+  fileName = `./${file.path}`;
+  fileName.toString();
+  // JSON.stringify(fileName)
+  console.log(fileName);
+  res.redirect('/transcribe');
+
+})
+
 
 
 var jsdom = require("jsdom");
+const app = require('../app');
 const { JSDOM } = jsdom;
 const { window } = new JSDOM();
 const { document } = (new JSDOM('')).window;
@@ -13,9 +51,9 @@ global.document = document;
 
 var $ = jQuery = require('jquery')(window);
 
-async function speechToText() {
+router.get('/', async function(req, res, next) {
   const client = new speech.SpeechClient();
-  const filename = './public/resources/big-jet.wav';
+  const filename = fileName;
   const encoding = 'LINEAR16';
   const sampleRateHertz = 44100;
   const languageCode = 'en-GB';
@@ -43,8 +81,15 @@ async function speechToText() {
     audio: audio,
   };
 
-  const [response] = await client.recognize(request);
-  const transcription = response.results.map(result => result.alternatives[0].transcript);
+  // Detects speech in the audio file. This creates a recognition job that you
+      // can wait for now, or get its result later.
+      const [operation] = await client.longRunningRecognize(request);
+      
+      // Get a Promise representation of the final result of the job
+      const [response] = await operation.promise();
+      const transcription = response.results
+        .map(result => result.alternatives[0].transcript)
+        .join('\n');
   const confidence = response.results
   .map(result => result.alternatives[0].confidence);
 
@@ -154,16 +199,15 @@ async function speechToText() {
   var icon="";
   var color = "";
 
-  console.log(`Transcription: \n${transcription}`);
-  console.log('Confidence', newConfidence);
-  console.log(channel);
+  // console.log(`Transcription: \n${transcription}`);
+  // console.log('Confidence', newConfidence);
+  // console.log(channel);
   console.log(refinedChannel);
-  router.get('/', function(req, res, next) {
-    res.render('transcription', { title: 'Air Traffic Control Speech Recognition', transcription, newConfidence, color, position, icon, refinedChannel });
-  });
-}
 
-speechToText();
+  res.render('transcription', { title: 'Air Traffic Control Speech Recognition', transcription, newConfidence, color, position, icon, refinedChannel });
+});
+
+
 
 router.get('/template', function(req, res, next) {
   res.render('transcription-template', { title: 'Air Traffic Control Speech Recognition' })
