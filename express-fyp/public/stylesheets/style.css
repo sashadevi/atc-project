@@ -1,9 +1,6 @@
-body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
-
 nav {
-  background-color: #00B7FF;
+  background-color: #071920;
+  color: #ffffff
 }
 
 a {
@@ -51,4 +48,20 @@ a {
 
 .btn {
   vertical-align: bottom;
+}
+
+.about {
+  background-color: #071920;
+  color: #ffffff;
+}
+
+i {
+  color: #071920;
+}
+
+h2 {
+  font-family: "Courier New", Courier, monospace;
+
+p {
+  font-family: Arial, Helvetica, sans-serif;
 }

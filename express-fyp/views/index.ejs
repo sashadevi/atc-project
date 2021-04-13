@@ -11,7 +11,7 @@
   </head>
   <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
           <a class="navbar-brand" href='#'><%= title %> Application</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,7 +30,7 @@
       </div>
     </nav>
 
-    <div class="card mb-3"0>
+    <div class="card mb-3">
       <div class="row strip">
         <img src="images/index-plane.jpg" class="card-img-top"/>
         <div class="strip-content card-body">
@@ -41,18 +41,21 @@
         </div>
       </div>
   
-      <div class="row">
-        <h2> About the System </h2>
-        <p>The aim of the project is to build a proof-of-concept system to support Air Traffic Control (ATC) messages. The system will encourage clear speech and highlight where any possible miscommunications may have occurred. 
-          The system will hear what the Air Traffic Controller has said and what the pilot has said. It will then make sure the two instructions match. If the instructions do not match, then it will flag this back to the Air Traffic Controller.
-        </p>
-
+      <div class="row about">
+        <div class="d-flex justify-content-center">
+          <h2> About the System </h2>  
+        </div>
+        <div class="d-flex text-center">
+          <p>The aim of the project is to build a proof-of-concept system to support Air Traffic Control (ATC) messages. The system will encourage clear speech and highlight where any possible miscommunications may have occurred. 
+            The system will hear what the Air Traffic Controller has said and what the pilot has said. It will then make sure the two instructions match. If the instructions do not match, then it will flag this back to the Air Traffic Controller.
+          </p>
+        </div>
       </div>
     </div>
 
     <div class="row">
       <h2 class="text-center"> How it works </h2>
-      <div class="col-md justify-content-center">
+      <div class="col-md">
         <div class="d-flex justify-content-center">
           <h3>Upload file</h3>
         </div>
