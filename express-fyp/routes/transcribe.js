@@ -134,22 +134,32 @@ router.get('/', async function(req, res, next) {
     callSignArrays[i] = callSignArray;
 
     //find all keywords and add to longer array
-    keyWordArray = str.match(/\b(?:cleared|takeoff|landing|expedite|flight level|squawk|wilco)\b/gi);
+    keyWordArray = str.match(/\b(?:cleared|takeoff|landing|expedite|flight level|squawk|wilco|taxi|runway|lineup|turn right|turn left|descend|localising|mayday)\b/gi);
     if(keyWordArray != null) {
       keyWordArrays[i] = keyWordArray;
     }
   }
   console.log(numArrays);
-  highlightWords(numArrays);
-  highlightWords(callSignArrays);
-  highlightWords(keyWordArrays);
+  var numColor;
+  console.log(highlightWords(numArrays));
+  highlightWords(numArrays, numColor);
+
+  var callsignColor;
+  console.log(callSignArrays);
+  console.log(highlightWords(callSignArrays));
+  highlightWords(callSignArrays, callsignColor);
+
+  var keywordColor;
+  console.log(keyWordArrays);
+  console.log(highlightWords(keyWordArrays));
+  highlightWords(keyWordArrays, keywordColor);
 
   for(let i=0; i < refinedChannel.length; i ++) {
     var  str = refinedChannel[i];
-    refinedChannel[i]=findMatches(numArrays[i], str, refinedChannel[i], numHighlightColour);
-    refinedChannel[i]=findMatches(callSignArrays[i], refinedChannel[i], refinedChannel[i], numHighlightColour);
+    refinedChannel[i]=findMatches(numArrays[i], str, refinedChannel[i], highlightWords(numArrays, numColor));
+    refinedChannel[i]=findMatches(callSignArrays[i], refinedChannel[i], refinedChannel[i], highlightWords(callSignArrays, callsignColor));
     if(keyWordArrays[i] != null) {
-      refinedChannel[i]=findMatches(keyWordArrays[i], refinedChannel[i], refinedChannel[i], numHighlightColour);
+      refinedChannel[i]=findMatches(keyWordArrays[i], refinedChannel[i], refinedChannel[i], highlightWords(keyWordArrays, keywordColor));
     }
   }
   console.log(refinedChannel);
@@ -164,40 +174,33 @@ router.get('/', async function(req, res, next) {
       });
     });
     oldStr = str;
+    console.log(oldStr);
     return oldStr;
   }
 
-  function highlightWords(array, type) {
+  function highlightWords(array, color) {
     for(let i=1; i < array.length; i = i+2) {
       if(arrayCompare(array[i-1], array[i]) == true) {
-        numHighlightColour = "green";
+        color = "green";
       } else {
-        numHighlightColour = "red";
+        color = "red";
       }
+      console.log(numHighlightColour);
     }
+    return color;
   }
 
 
-  function arrayCompare(_arr1, _arr2) {
-    if (
-      !Array.isArray(_arr1)
-      || !Array.isArray(_arr2)
-      || _arr1.length !== _arr2.length
-      ) {
-        return false;
-      }
-    
-    // .concat() to not mutate arguments
-    const arr1 = _arr1.concat().sort();
-    const arr2 = _arr2.concat().sort();
-    
-    for (let i = 0; i < arr1.length; i++) {
-        if (arr1[i] !== arr2[i]) {
-            return false;
-         }
+  function arrayCompare(a, b) {
+    if (a.length !== b.length) return false;
+    const uniqueValues = new Set([...a, ...b]);
+    for (const v of uniqueValues) {
+      const aCount = a.filter(e => e === v).length;
+      const bCount = b.filter(e => e === v).length;
+      if (aCount !== bCount) return false;
     }
-    
     return true;
+
   }
 
 
@@ -205,7 +208,7 @@ router.get('/', async function(req, res, next) {
   var icon="";
   var color = "";
 
-  // console.log(`Transcription: \n${transcription}`);
+  console.log(`Transcription: \n${transcription}`);
   // console.log('Confidence', newConfidence);
   // console.log(channel);
   console.log(refinedChannel);
