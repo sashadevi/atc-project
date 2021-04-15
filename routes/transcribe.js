@@ -115,8 +115,6 @@ router.get('/', async function(req, res, next) {
   let newConfidence = confidence.filter((element, index) => {
     return index % 2 === 0;
   });
-
-  var numHighlightColour = "";
   var numArray = [];
   var numArrays = [];
   var callSignArrays = [];
@@ -139,27 +137,30 @@ router.get('/', async function(req, res, next) {
       keyWordArrays[i] = keyWordArray;
     }
   }
-  console.log(numArrays);
-  var numColor;
-  console.log(highlightWords(numArrays));
-  highlightWords(numArrays, numColor);
 
-  var callsignColor;
+  console.log(numArrays);
+  console.log(highlightWords(numArrays));
+  
+
   console.log(callSignArrays);
   console.log(highlightWords(callSignArrays));
-  highlightWords(callSignArrays, callsignColor);
 
-  var keywordColor;
   console.log(keyWordArrays);
   console.log(highlightWords(keyWordArrays));
-  highlightWords(keyWordArrays, keywordColor);
+
 
   for(let i=0; i < refinedChannel.length; i ++) {
     var  str = refinedChannel[i];
-    refinedChannel[i]=findMatches(numArrays[i], str, refinedChannel[i], highlightWords(numArrays, numColor));
-    refinedChannel[i]=findMatches(callSignArrays[i], refinedChannel[i], refinedChannel[i], highlightWords(callSignArrays, callsignColor));
+    var allColors = [];
+    allColors.push(highlightWords(numArrays));
+    allColors.push(highlightWords(callSignArrays));
+    allColors.push(highlightWords(keyWordArrays));
+
+    // console.log(highlightWords(numArrays, numColor));
+    refinedChannel[i]=findMatches(numArrays[i], str, refinedChannel[i], highlightWords(numArrays)[i]);
+    refinedChannel[i]=findMatches(callSignArrays[i], refinedChannel[i], refinedChannel[i], highlightWords(callSignArrays)[i]);
     if(keyWordArrays[i] != null) {
-      refinedChannel[i]=findMatches(keyWordArrays[i], refinedChannel[i], refinedChannel[i], highlightWords(keyWordArrays, keywordColor));
+      refinedChannel[i]=findMatches(keyWordArrays[i], refinedChannel[i], refinedChannel[i], highlightWords(keyWordArrays)[i]);
     }
   }
   console.log(refinedChannel);
@@ -170,7 +171,7 @@ router.get('/', async function(req, res, next) {
     str.match(re).forEach(function(match, i) { // loop over the matches
       str = str.replace(match, function replace(match) {
         // wrap the found strings
-        return '<u style="text-decoration-color:' + color+'; text-decoration-thickness: 3px;">' + match + '</u>';
+        return '<u style="text-decoration-color:' + color +'; text-decoration-thickness: 3px;">' + match + '</u>';
       });
     });
     oldStr = str;
@@ -178,16 +179,26 @@ router.get('/', async function(req, res, next) {
     return oldStr;
   }
 
-  function highlightWords(array, color) {
+  function highlightWords(array) {
+    var colors = [];
     for(let i=1; i < array.length; i = i+2) {
-      if(arrayCompare(array[i-1], array[i]) == true) {
-        color = "green";
+      // console.log("Array at i-1: " + array[i-1]);
+      // console.log("Array at i: " + array[i]);
+      if(arrayCompare(array[i-1], array[i]) == false) {
+        colors.push("red");
+        colors.push("red");
+        console.log("false");
+        
+        // return color;
       } else {
-        color = "red";
+        colors.push("green");
+        colors.push("green");
+        console.log("true");
       }
-      console.log(numHighlightColour);
+      // console.log(color);
     }
-    return color;
+    console.log("colors array: " + colors);
+    return colors;
   }
 
 
