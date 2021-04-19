@@ -65,17 +65,18 @@ router.get('/', async function(req, res, next) {
   const languageCode = 'en-GB';
 
 
-  const speechConext = {
+  const speechContext = {
     phrases : ['$OOV_CLASS_DIGIT_SEQUENCE']
   }
 
   const config = {
-    encoding: encoding,
-    sampleRateHertz: sampleRateHertz,
-    languageCode: languageCode,
-    audioChannelCount: 2,
-    enableSeparateRecognitionPerChannel: true,
-    speechContexts: [speechConext]
+    "audioChannelCount": 2,
+    "enableSeparateRecognitionPerChannel": true,
+    "encoding": "LINEAR16",
+    "languageCode": "en-US",
+    "model": "default",
+    "speechContexts" : [speechContext]
+    
   };
 
   const audio = {
@@ -98,6 +99,7 @@ router.get('/', async function(req, res, next) {
         .join('\n');
   const confidence = response.results
   .map(result => result.alternatives[0].confidence);
+  
 
   var speechResults = [];
   speechResults.push(transcription);
@@ -107,6 +109,8 @@ router.get('/', async function(req, res, next) {
     result =>
       `${result.alternatives[0].transcript}`
   );
+
+  console.log(channel);
 
   let refinedChannel = channel.filter((element, index) => {
     return index % 2 === 0;
@@ -119,6 +123,7 @@ router.get('/', async function(req, res, next) {
   var numArrays = [];
   var callSignArrays = [];
   var keyWordArrays = [];
+  var warningIcon = '<i class="fas fa-flag"></i>'
   //loop through transcription
   for(let i=0; i<refinedChannel.length; i++) {
 
@@ -128,11 +133,11 @@ router.get('/', async function(req, res, next) {
     numArrays[i] = numArray;
 
     //find all callsigns and add to a longer array
-    callSignArray = str.match(/([A-Z][a-z]*)[\s-]([A-Z][a-z]*)/g);
-    callSignArrays[i] = callSignArray;
+    // callSignArray = str.match(/([A-Z][a-z]*)[\s-]([A-Z][a-z]*)/g);
+    // callSignArrays[i] = callSignArray;
 
     //find all keywords and add to longer array
-    keyWordArray = str.match(/\b(?:cleared|takeoff|landing|expedite|flight level|squawk|wilco|taxi|runway|lineup|turn right|turn left|descend|localising|mayday)\b/gi);
+    keyWordArray = str.match(/\b(?:cleared|takeoff|landing|expedite|flight level|squawk|wilco|taxi|runway|lineup|turn right|turn left|descend|localising|mayday|no speed restrictions|heading|climb|fly)\b/gi);
     if(keyWordArray != null) {
       keyWordArrays[i] = keyWordArray;
     }
@@ -142,8 +147,8 @@ router.get('/', async function(req, res, next) {
   console.log(highlightWords(numArrays));
   
 
-  console.log(callSignArrays);
-  console.log(highlightWords(callSignArrays));
+  // console.log(callSignArrays);
+  // console.log(highlightWords(callSignArrays));
 
   console.log(keyWordArrays);
   console.log(highlightWords(keyWordArrays));
@@ -157,8 +162,12 @@ router.get('/', async function(req, res, next) {
     allColors.push(highlightWords(keyWordArrays));
 
     // console.log(highlightWords(numArrays, numColor));
+
     refinedChannel[i]=findMatches(numArrays[i], str, refinedChannel[i], highlightWords(numArrays)[i]);
-    refinedChannel[i]=findMatches(callSignArrays[i], refinedChannel[i], refinedChannel[i], highlightWords(callSignArrays)[i]);
+    // else if(callSignArrays[i] != null) {
+    //   refinedChannel[i]=findMatches(callSignArrays[i], refinedChannel[i], refinedChannel[i], highlightWords(callSignArrays)[i]);
+    // }
+    
     if(keyWordArrays[i] != null) {
       refinedChannel[i]=findMatches(keyWordArrays[i], refinedChannel[i], refinedChannel[i], highlightWords(keyWordArrays)[i]);
     }
@@ -217,14 +226,15 @@ router.get('/', async function(req, res, next) {
 
   var position="";
   var icon="";
-  var color = "";
+  var confidenceIcon = "";
+  
 
   console.log(`Transcription: \n${transcription}`);
   // console.log('Confidence', newConfidence);
   // console.log(channel);
   console.log(refinedChannel);
 
-  res.render('transcription', { title: 'Air Traffic Control Speech Recognition', transcription, newConfidence, color, position, icon, refinedChannel });
+  res.render('transcription', { title: 'Air Traffic Control Speech Recognition', transcription, newConfidence, confidenceIcon, position, icon, refinedChannel });
 });
 
 
