@@ -180,7 +180,7 @@ router.get('/', async function(req, res, next) {
     str.match(re).forEach(function(match, i) { // loop over the matches
       str = str.replace(match, function replace(match) {
         // wrap the found strings
-        return '<u style="text-decoration-color:' + color +'; text-decoration-thickness: 3px;">' + match + '</u>';
+        return `<u style="text-decoration-color: ${color}; text-decoration-thickness: 3px;"> ${match} </u>`;
       });
     });
     oldStr = str;
