@@ -36,17 +36,27 @@
             <%for(let i=0; i<refinedChannel.length; i++) {%>
               <%if(i%2 != 0) { position="left"; icon="fa-plane" }
                 else { position="right"; icon="fa-broadcast-tower"}
-                if(newConfidence[i] <= 0.5 ) { confidenceIcon="fas fa-exclamation-triangle"; }
-                else if(newConfidence[i] > 0.5 && newConfidence[i] <= 0.7) { confidenceIcon="warning"; }
               %>
+
               <div class="chat-message-<%= position %> pb-4">
+                <%
+                if(newConfidence[i] <= 0.8 ) {%>
+                  <i class="fas fa-exclamation-triangle" style="color: red;"></i>
+                <%}
+                else if(newConfidence[i] > 0.8 && newConfidence[i] <= 0.9) { %>
+                  <i class="fas fa-exclamation-triangle" style="color: orange;"></i>
+                <%}
+                else {%>
+                  <i></i>
+                <%}%>
                 <div class="p-2">
                   <i class="fas <%= icon %>"></i>
                 </div>
                 <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3 border">
                   <%- refinedChannel[i] -%>
-                  <i class="fas <%= confidenceIcon %>"></i>
-                </div>    
+                  <!-- <i class="fas <%= confidenceIcon %>"></i> -->
+                </div>   
+                
               </div>
             <%}%>
           </div>  

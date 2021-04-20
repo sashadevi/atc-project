@@ -1,3 +1,4 @@
+//import required packages
 var express = require('express');
 var router = express.Router();
 const fs = require('fs');
@@ -5,11 +6,14 @@ const speech = require('@google-cloud/speech');
 const { match } = require('assert');
 var multer = require('multer');
 var wavFileInfo = require('wav-file-info');
+var { wordsToNumbers } = require('words-to-numbers');
 
+//render page to upload audio files
 router.get('/upload', function(req, res, next) {
   res.render('upload', { title: 'Air Traffic Control Speech Recognition' });
 });
 
+//configure multer, which enables users to upload files
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, './public/uploads')
@@ -22,20 +26,24 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage })
 
 var fileName;
-var encoding;
 var sampleRate;
 
+//enable users to upload files
 router.post('/uploadfile', upload.single('myFile'), (req, res, next) => {
 file = req.file
+//if file is empty, return a status 400 error
 if (!file) {
   const error = new Error('Please upload a file')
   error.httpStatusCode = 400
   return next(error)
 }
+  //log file details for testing purposes
   console.log(file);
+  //file path will be the path object returned by 'file' variable
   fileName = `./${file.path}`;
   fileName.toString();
-  // JSON.stringify(fileName)
+  
+  //use a libarary called 'wav-file-info' to read sample rate of audio file
   wavFileInfo.infoByFilename(fileName, function(err, info) {
     if (err) throw err;
     console.log(info);
@@ -43,6 +51,7 @@ if (!file) {
     console.log(sampleRate);
   })
   console.log(fileName);
+  //once they have uploaded the file, redirect user to transcription page
   res.redirect('/transcribe');
 })
 
@@ -58,25 +67,67 @@ global.document = document;
 var $ = jQuery = require('jquery')(window);
 
 router.get('/', async function(req, res, next) {
+  //create a new speech client
   const client = new speech.SpeechClient();
   const filename = fileName;
-  const encoding = 'LINEAR16';
   const sampleRateHertz = sampleRate;
-  const languageCode = 'en-GB';
-
 
   const speechContext = {
-    phrases : ['$OOV_CLASS_DIGIT_SEQUENCE']
+    "phrases" : ["$OOV_CLASS_ALPHANUMERIC_SEQUENCE",
+                  "cleared",
+                  "takeoff",
+                  "landing",
+                  "expedite",
+                  "flight level",
+                  "squawk",
+                  "wilco",
+                  "taxi",
+                  "runway",
+                  "lineup",
+                  "turn right",
+                  "turn left",
+                  "descend",
+                  "localising",
+                  "mayday",
+                  "no speed restrictions",
+                  "heading",
+                  "climb",
+                  "fly"]
   }
 
   const config = {
     "audioChannelCount": 2,
     "enableSeparateRecognitionPerChannel": true,
     "encoding": "LINEAR16",
-    "languageCode": "en-US",
-    "model": "default",
-    "speechContexts" : [speechContext]
-    
+    "languageCode": "en-GB",
+    "model": "command_and_search",
+    "speechContexts" : [{
+      "phrases": [
+        "$OOV_CLASS_ALPHANUMERIC_SEQUENCE",
+        "cleared",
+        "takeoff",
+        "landing",
+        "expedite",
+        "flight level",
+        "squawk",
+        "wilco",
+        "taxi",
+        "runway",
+        "lineup",
+        "turn right",
+        "turn left",
+        "descend",
+        "localising",
+        "mayday",
+        "no speed restrictions",
+        "heading",
+        "climb",
+        "fly",
+        "holding point"
+      ]
+    }],
+    "sampleRateHertz": sampleRateHertz,
+
   };
 
   const audio = {
@@ -99,6 +150,7 @@ router.get('/', async function(req, res, next) {
         .join('\n');
   const confidence = response.results
   .map(result => result.alternatives[0].confidence);
+  // console.log(confidence);
   
 
   var speechResults = [];
@@ -129,6 +181,8 @@ router.get('/', async function(req, res, next) {
 
     var  str = refinedChannel[i];
     //find all numbers and add  to a longer array
+    wordsToNumbers(str);
+    console.log(wordsToNumbers(str));
     numArray = str.match(/\d+/g);
     numArrays[i] = numArray;
 
@@ -227,14 +281,15 @@ router.get('/', async function(req, res, next) {
   var position="";
   var icon="";
   var confidenceIcon = "";
+  var iconColor = "";
   
 
   console.log(`Transcription: \n${transcription}`);
-  // console.log('Confidence', newConfidence);
+  console.log('Confidence', newConfidence);
   // console.log(channel);
   console.log(refinedChannel);
 
-  res.render('transcription', { title: 'Air Traffic Control Speech Recognition', transcription, newConfidence, confidenceIcon, position, icon, refinedChannel });
+  res.render('transcription', { title: 'Air Traffic Control Speech Recognition', transcription, newConfidence, confidenceIcon, position, icon, iconColor, refinedChannel });
 });
 
 

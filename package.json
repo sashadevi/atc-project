@@ -31,7 +31,8 @@
     "password": "^0.1.1",
     "underscore": "^1.12.1",
     "wav-file-info": "^0.0.10",
-    "web-audio-api": "^0.2.2"
+    "web-audio-api": "^0.2.2",
+    "words-to-numbers": "^1.5.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
