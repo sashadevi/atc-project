@@ -104,26 +104,6 @@ router.get('/', async function(req, res, next) {
     "speechContexts" : [{
       "phrases": [
         "$OOV_CLASS_ALPHANUMERIC_SEQUENCE",
-        "cleared",
-        "takeoff",
-        "landing",
-        "expedite",
-        "flight level",
-        "squawk",
-        "wilco",
-        "taxi",
-        "runway",
-        "lineup",
-        "turn right",
-        "turn left",
-        "descend",
-        "localising",
-        "mayday",
-        "no speed restrictions",
-        "heading",
-        "climb",
-        "fly",
-        "holding point"
       ]
     }],
     "sampleRateHertz": sampleRateHertz,
@@ -217,7 +197,7 @@ router.get('/', async function(req, res, next) {
 
     // console.log(highlightWords(numArrays, numColor));
 
-    refinedChannel[i]=findMatches(numArrays[i], str, refinedChannel[i], highlightWords(numArrays)[i]);
+    refinedChannel[i]=findMatches(numArrays[i], refinedChannel[i], refinedChannel[i], highlightWords(numArrays)[i]);
     // else if(callSignArrays[i] != null) {
     //   refinedChannel[i]=findMatches(callSignArrays[i], refinedChannel[i], refinedChannel[i], highlightWords(callSignArrays)[i]);
     // }
@@ -234,11 +214,12 @@ router.get('/', async function(req, res, next) {
     str.match(re).forEach(function(match, i) { // loop over the matches
       str = str.replace(match, function replace(match) {
         // wrap the found strings
-        return `<u style="text-decoration-color: ${color}; text-decoration-thickness: 3px;"> ${match} </u>`;
+        return `<u style="text-decoration: none; border-bottom: solid; border-color: ${color};"> ${match} </u>`;
       });
+      console.log("String: " + str);
     });
     oldStr = str;
-    console.log(oldStr);
+    console.log("Old string: " + oldStr);
     return oldStr;
   }
 
