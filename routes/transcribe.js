@@ -171,7 +171,7 @@ router.get('/', async function(req, res, next) {
     // callSignArrays[i] = callSignArray;
 
     //find all keywords and add to longer array
-    keyWordArray = str.match(/\b(?:cleared|takeoff|landing|expedite|flight level|squawk|wilco|taxi|runway|lineup|turn right|turn left|descend|localising|mayday|no speed restrictions|heading|climb|fly)\b/gi);
+    keyWordArray = str.match(/\b(?:cleared|takeoff|landing|expedite|flight level|squawk|wilco|taxi|runway|lineup|line-up|turn right|turn left|descend|localising|mayday|no speed restrictions|heading|climb|fly)\b/gi);
     if(keyWordArray != null) {
       keyWordArrays[i] = keyWordArray;
     }
@@ -203,7 +203,7 @@ router.get('/', async function(req, res, next) {
     // }
     
     if(keyWordArrays[i] != null) {
-      refinedChannel[i]=findMatches(keyWordArrays[i], refinedChannel[i], refinedChannel[i], highlightWords(keyWordArrays)[i]);
+      refinedChannel[i]=findMatchesStr(keyWordArrays[i], refinedChannel[i], refinedChannel[i], highlightWords(keyWordArrays)[i]);
     }
   }
   console.log(refinedChannel);
@@ -215,6 +215,21 @@ router.get('/', async function(req, res, next) {
       str = str.replace(match, function replace(match) {
         // wrap the found strings
         return `<u style="text-decoration: none; border-bottom: solid; border-color: ${color};"> ${match} </u>`;
+      });
+      console.log("String: " + str);
+    });
+    oldStr = str;
+    console.log("Old string: " + oldStr);
+    return oldStr;
+  }
+
+  function findMatchesStr(arr, str, oldStr, color) {
+    var re = new RegExp(arr.join("|"), "g"); // create a a | b | c regex
+    console.log(re, str.match(re));
+    str.match(re).forEach(function(match, i) { // loop over the matches
+      str = str.replace(match, function replace(match) {
+        // wrap the found strings
+        return `<u style="text-decoration: ${color} wavy underline;"> ${match} </u>`;
       });
       console.log("String: " + str);
     });
