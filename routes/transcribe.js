@@ -92,7 +92,18 @@ router.get('/', async function(req, res, next) {
                   "no speed restrictions",
                   "heading",
                   "climb",
-                  "fly"]
+                  "fly",
+                  "qatari",
+                  "delta",
+                  "all nippon",
+                  "klm",
+                  "speedbird",
+                  "turkish",
+                  "ethihad",
+                  "singapore",
+                  "lufthansa",
+                  "united",
+                  "big jet"]
   }
 
   const config = {
@@ -167,8 +178,8 @@ router.get('/', async function(req, res, next) {
     numArrays[i] = numArray;
 
     //find all callsigns and add to a longer array
-    // callSignArray = str.match(/([A-Z][a-z]*)[\s-]([A-Z][a-z]*)/g);
-    // callSignArrays[i] = callSignArray;
+    callSignArray = str.match(/\b(?:qatari|delta|all nippon|klm|speedbird|turkish|ethihad|singapore|lufthansa|united|big jet)\b/gi);
+    callSignArrays[i] = callSignArray;
 
     //find all keywords and add to longer array
     keyWordArray = str.match(/\b(?:cleared|takeoff|landing|expedite|flight level|squawk|wilco|taxi|runway|lineup|line-up|turn right|turn left|descend|localising|mayday|no speed restrictions|heading|climb|fly)\b/gi);
@@ -181,8 +192,8 @@ router.get('/', async function(req, res, next) {
   console.log(highlightWords(numArrays));
   
 
-  // console.log(callSignArrays);
-  // console.log(highlightWords(callSignArrays));
+  console.log(callSignArrays);
+  console.log(highlightWords(callSignArrays));
 
   console.log(keyWordArrays);
   console.log(highlightWords(keyWordArrays));
@@ -198,9 +209,10 @@ router.get('/', async function(req, res, next) {
     // console.log(highlightWords(numArrays, numColor));
 
     refinedChannel[i]=findMatches(numArrays[i], refinedChannel[i], refinedChannel[i], highlightWords(numArrays)[i]);
-    // else if(callSignArrays[i] != null) {
-    //   refinedChannel[i]=findMatches(callSignArrays[i], refinedChannel[i], refinedChannel[i], highlightWords(callSignArrays)[i]);
-    // }
+
+    if(callSignArrays[i] != null) {
+      refinedChannel[i]=findMatchesCallsign(callSignArrays[i], refinedChannel[i], refinedChannel[i], highlightWords(callSignArrays)[i]);
+    }
     
     if(keyWordArrays[i] != null) {
       refinedChannel[i]=findMatchesStr(keyWordArrays[i], refinedChannel[i], refinedChannel[i], highlightWords(keyWordArrays)[i]);
@@ -238,23 +250,33 @@ router.get('/', async function(req, res, next) {
     return oldStr;
   }
 
+  function findMatchesCallsign(arr, str, oldStr, color) {
+    var re = new RegExp(arr.join("|"), "g"); // create a a | b | c regex
+    console.log(re, str.match(re));
+    str.match(re).forEach(function(match, i) { // loop over the matches
+      str = str.replace(match, function replace(match) {
+        // wrap the found strings
+        return `<u style="text-decoration: none; border-bottom: double; border-color: ${color};"> ${match} </u>`;
+      });
+      console.log("String: " + str);
+    });
+    oldStr = str;
+    console.log("Old string: " + oldStr);
+    return oldStr;
+  }
+
   function highlightWords(array) {
     var colors = [];
     for(let i=1; i < array.length; i = i+2) {
-      // console.log("Array at i-1: " + array[i-1]);
-      // console.log("Array at i: " + array[i]);
       if(arrayCompare(array[i-1], array[i]) == false) {
         colors.push("red");
         colors.push("red");
         console.log("false");
-        
-        // return color;
       } else {
         colors.push("green");
         colors.push("green");
         console.log("true");
       }
-      // console.log(color);
     }
     console.log("colors array: " + colors);
     return colors;
@@ -269,6 +291,7 @@ router.get('/', async function(req, res, next) {
       const bCount = b.filter(e => e === v).length;
       if (aCount !== bCount) return false;
     }
+
     return true;
 
   }
