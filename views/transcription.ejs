@@ -39,24 +39,25 @@
               %>
 
               <div class="chat-message-<%= position %> pb-4">
-                <%
-                if(newConfidence[i] <= 0.8 ) {%>
-                  <i class="fas fa-exclamation-triangle" style="color: red;"></i>
-                <%}
-                else if(newConfidence[i] > 0.8 && newConfidence[i] <= 0.91) { %>
-                  <i class="fas fa-exclamation-triangle" style="color: orange;"></i>
-                <%}
-                else {%>
-                  <i></i>
-                <%}%>
                 <div class="p-2">
                   <i class="fas <%= icon %>"></i>
                 </div>
                 <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3 border">
                   <%- refinedChannel[i] -%>
                   <!-- <i class="fas <%= confidenceIcon %>"></i> -->
-                </div>   
-                
+                </div>
+                <div class="p-2">
+                  <%
+                  if(newConfidence[i] <= 0.8 ) {%>
+                    <i class="fas fa-exclamation-triangle fa-2x" style="color: red;"></i>
+                  <%}
+                  else if(newConfidence[i] > 0.8 && newConfidence[i] <= 0.91) { %>
+                    <i class="fas fa-exclamation-triangle fa-2x" style="color: orange;"></i>
+                  <%}
+                  else {%>
+                    <i></i>
+                  <%}%>
+                </div>
               </div>
             <%}%>
           </div>  
