@@ -9,6 +9,7 @@ var transcriptionRouter = require('./routes/transcribe');
 var profileRouter = require('./routes/profile');
 var settingsRouter = require('./routes/settings');
 var authRouter = require('./routes/auth');
+var aboutRouter = require('./routes/about');
 
 var app = express();
 
@@ -27,6 +28,7 @@ app.use('/transcribe', transcriptionRouter);
 app.use('/profile', profileRouter);
 app.use('/settings', settingsRouter);
 app.use('/auth', authRouter);
+app.use('/about', aboutRouter);
 // app.use('/auth', authRouter);
 
 // catch 404 and forward to error handler
