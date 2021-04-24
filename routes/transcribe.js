@@ -164,7 +164,9 @@ router.get('/', async function(req, res, next) {
   });
   var numArray = [];
   var numArrays = [];
+  var callSignArray = [];
   var callSignArrays = [];
+  var keyWordArray = [];
   var keyWordArrays = [];
   var warningIcon = '<i class="fas fa-flag"></i>'
   //loop through transcription
@@ -179,10 +181,17 @@ router.get('/', async function(req, res, next) {
 
     //find all callsigns and add to a longer array
     callSignArray = str.match(/\b(?:qatari|delta|all nippon|klm|speedbird|turkish|ethihad|singapore|lufthansa|united|big jet)\b/gi);
-    callSignArrays[i] = callSignArray;
+    if (callSignArray != null) {
+      callSignArrays[i] = callSignArray;
+    } else {
+      callSignArrays[i] = [];
+    }
+    console.log(callSignArrays[i]);
+
+    
 
     //find all keywords and add to longer array
-    keyWordArray = str.match(/\b(?:cleared|takeoff|landing|expedite|flight level|squawk|wilco|taxi|runway|lineup|line-up|turn right|turn left|descend|localising|mayday|no speed restrictions|heading|climb|fly)\b/gi);
+    keyWordArray = str.match(/\b(?:cleared|takeoff|landing|expedite|flight level|squawk|wilco|taxi|runway|lineup|line-up|right|left|descend|localising|mayday|no speed restrictions|heading|climb|fly|degrees|localizer)\b/gi);
     if(keyWordArray != null) {
       keyWordArrays[i] = keyWordArray;
     }
@@ -291,9 +300,7 @@ router.get('/', async function(req, res, next) {
       const bCount = b.filter(e => e === v).length;
       if (aCount !== bCount) return false;
     }
-
     return true;
-
   }
 
 
