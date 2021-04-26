@@ -1,6 +1,6 @@
-nav {
-  background-color: #071920;
-  color: #ffffff
+.navbar-custom {
+  background-color: #202020;
+  color: #ffffff;
 }
 
 a {
@@ -60,7 +60,7 @@ i {
 }
 
 h2 {
-  font-family: "Courier New", Courier, monospace;
+  font-family: "Montserrat";
 }
 p {
   font-family: Arial, Helvetica, sans-serif;

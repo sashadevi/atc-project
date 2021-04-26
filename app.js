@@ -29,7 +29,7 @@ app.use('/profile', profileRouter);
 app.use('/settings', settingsRouter);
 app.use('/auth', authRouter);
 app.use('/about', aboutRouter);
-// app.use('/auth', authRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

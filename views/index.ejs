@@ -2,6 +2,8 @@
 <html>
   <head>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://kit.fontawesome.com/1fcfbf548a.js" crossorigin="anonymous"></script>
@@ -10,9 +12,9 @@
   </head>
   <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
       <div class="container-fluid">
-          <a class="navbar-brand" href='#'><%= title %> Application</a>
+          <a class="navbar-brand" href='/'><img src="images/graphics/standalone.png" style="width:150px;height:50px;"></a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
           </button>
@@ -36,7 +38,7 @@
       <div class="row strip">
         <img src="images/index-plane-new.jpg" class="card-img-top"/>
         <div class="strip-content card-body">
-          <h2>A Proof-of-Concept Speech Recognition System Designed to help save lives</h2>
+          <h2>Improving communication in aviation</h2>
           <div class="col">
             <a class="btn btn-primary" href="/transcribe/upload" role="button">Click here to upload an audio file for transcription</a>
           </div>

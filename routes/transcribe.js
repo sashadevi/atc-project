@@ -7,7 +7,6 @@ const { match } = require('assert');
 var multer = require('multer');
 var wavFileInfo = require('wav-file-info');
 var { wordsToNumbers } = require('words-to-numbers');
-
 //render page to upload audio files
 router.get('/upload', function(req, res, next) {
   res.render('upload', { title: 'Air Traffic Control Speech Recognition' });
@@ -73,7 +72,7 @@ router.get('/', async function(req, res, next) {
   const sampleRateHertz = sampleRate;
 
   const speechContext = {
-    "phrases" : ["$OOV_CLASS_ALPHANUMERIC_SEQUENCE",
+    "phrases" : ["$OOV_CLASS_DIGIT_SEQUENCE",
                   "cleared",
                   "takeoff",
                   "landing",
