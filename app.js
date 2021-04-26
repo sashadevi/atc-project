@@ -1,14 +1,13 @@
+//import required packages
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+//Create path to differerent routes
 var indexRouter = require('./routes/index');
 var transcriptionRouter = require('./routes/transcribe');
-var profileRouter = require('./routes/profile');
-var settingsRouter = require('./routes/settings');
-var authRouter = require('./routes/auth');
 var aboutRouter = require('./routes/about');
 
 var app = express();
@@ -25,9 +24,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/transcribe', transcriptionRouter);
-app.use('/profile', profileRouter);
-app.use('/settings', settingsRouter);
-app.use('/auth', authRouter);
 app.use('/about', aboutRouter);
 
 
